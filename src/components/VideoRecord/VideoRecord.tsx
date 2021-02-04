@@ -78,6 +78,16 @@ const VideoRecord: React.FC<IVideoRecord> = ({
       <ReactMediaRecorder
         video
         onStop={(blobUrl: string, blob: Blob) => {
+          setFileList([
+            {
+              uid: blobUrl,
+              webkitRelativePath: blobUrl,
+              lastModifiedDate: new Date(),
+              lastModified: 1,
+              name: "file",
+              ...blob,
+            },
+          ]);
           setVideo(blobUrl);
         }}
         mediaRecorderOptions={{ status: stat }}
