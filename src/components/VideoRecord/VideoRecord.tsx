@@ -30,7 +30,15 @@ const VideoRecord: React.FC<IVideoRecord> = ({
   setVideo,
 }): React.ReactElement => {
   return (
-    <Modal onCancel={onCancel} visible={visible} footer={null} width={800}>
+    <Modal
+      onCancel={() => {
+        setVideo(undefined);
+        onCancel();
+      }}
+      visible={visible}
+      footer={null}
+      width={600}
+    >
       <ReactMediaRecorder
         video
         onStop={(blobUrl: string, blob: Blob) => {
@@ -49,7 +57,7 @@ const VideoRecord: React.FC<IVideoRecord> = ({
           setVideo(mediaBlobUrl);
           return (
             <div>
-              {videoUrl ? (
+              {videoUrl && mediaBlobUrl ? (
                 <video src={videoUrl} controls height={300} width={600} />
               ) : (
                 <VideoPreview stream={previewStream} />
@@ -61,6 +69,7 @@ const VideoRecord: React.FC<IVideoRecord> = ({
               <button onClick={resumeRecording}>Resume Recording</button>
               <button
                 onClick={() => {
+                  mediaBlobUrl = null;
                   clearBlobUrl();
                   setVideo(undefined);
                 }}
