@@ -19,7 +19,7 @@ const VideoPreview = ({ stream }: { stream: MediaStream | null }) => {
   if (!stream) {
     return null;
   }
-  return <video ref={videoRef} width={500} height={500} autoPlay controls />;
+  return <video ref={videoRef} width={500} height={500} autoPlay />;
 };
 
 const VideoRecord: React.FC<IVideoRecord> = ({
@@ -27,22 +27,46 @@ const VideoRecord: React.FC<IVideoRecord> = ({
   onCancel: handleCancel,
   visible,
 }): React.ReactElement => {
+  const [url, setUrl] = React.useState<string | undefined>();
+
   return (
-    <Modal onOk={handleOk} onCancel={handleCancel} visible={visible}>
+    <Modal
+      onOk={handleOk}
+      onCancel={handleCancel}
+      visible={visible}
+      width={800}
+    >
       <ReactMediaRecorder
         video
+        onStop={(blobUrl: string, blob: Blob) => {
+          setUrl(blobUrl);
+        }}
+        mediaRecorderOptions={{ mediaBlobUrl: url }}
         render={({
           status,
           startRecording,
           stopRecording,
+          pauseRecording,
+          resumeRecording,
           mediaBlobUrl,
           previewStream,
+          clearBlobUrl,
         }) => {
           return (
             <div>
               <p>{status}</p>
               <button onClick={startRecording}>Start Recording</button>
               <button onClick={stopRecording}>Stop Recording</button>
+              <button onClick={pauseRecording}>Pause Recording</button>
+              <button onClick={resumeRecording}>Resume Recording</button>
+              <button
+                onClick={() => {
+                  clearBlobUrl();
+                  setUrl(undefined);
+                }}
+              >
+                Clear Recording
+              </button>
               {mediaBlobUrl ? (
                 <video src={mediaBlobUrl} controls height={300} width={600} />
               ) : (
@@ -51,10 +75,6 @@ const VideoRecord: React.FC<IVideoRecord> = ({
             </div>
           );
         }}
-        onStop={(blobUrl: string, blob: Blob) => {
-          console.log(blobUrl);
-        }}
-        mediaRecorderOptions={{ mediaBlobUrl: "" }}
       />
     </Modal>
   );
