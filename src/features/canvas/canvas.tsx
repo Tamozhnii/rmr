@@ -12,9 +12,7 @@ const Canvas: React.FC = (): React.ReactElement => {
   return (
     <Content className={style.canvas}>
       <AddVideoBtn handleClick={handleClick} />
-      {modal && (
-        <VideoRecord onOk={handleOk} onCancel={handleCancel} visible={true} />
-      )}
+      <VideoRecord onOk={handleOk} onCancel={handleCancel} visible={modal} />
     </Content>
   );
 };
