@@ -19,7 +19,7 @@ const VideoPreview = ({ stream }: { stream: MediaStream | null }) => {
   if (!stream) {
     return null;
   }
-  return <video ref={videoRef} width={500} height={500} autoPlay />;
+  return <video ref={videoRef} height={300} width={600} autoPlay />;
 };
 
 const VideoRecord: React.FC<IVideoRecord> = ({
@@ -28,11 +28,15 @@ const VideoRecord: React.FC<IVideoRecord> = ({
   visible,
 }): React.ReactElement => {
   const [url, setUrl] = React.useState<string | undefined>();
+  const [stream, setStream] = React.useState<MediaStream | null>(
+    new MediaStream()
+  );
 
   return (
     <Modal
-      onOk={handleOk}
       onCancel={handleCancel}
+      closeIcon={false}
+      cancelText={"Ok"}
       visible={visible}
       width={800}
     >
@@ -41,7 +45,10 @@ const VideoRecord: React.FC<IVideoRecord> = ({
         onStop={(blobUrl: string, blob: Blob) => {
           setUrl(blobUrl);
         }}
-        mediaRecorderOptions={{ mediaBlobUrl: url }}
+        mediaRecorderOptions={{
+          mediaBlobUrl: url,
+          previewStream: stream,
+        }}
         render={({
           status,
           startRecording,
@@ -63,6 +70,7 @@ const VideoRecord: React.FC<IVideoRecord> = ({
                 onClick={() => {
                   clearBlobUrl();
                   setUrl(undefined);
+                  setStream(new MediaStream());
                 }}
               >
                 Clear Recording
