@@ -9,19 +9,19 @@ interface IVideoRecord {
   videoUrl?: string;
 }
 
-// const VideoPreview = ({ stream }: { stream: MediaStream | null }) => {
-//   const videoRef = React.useRef<HTMLVideoElement>(null);
+const VideoPreview = ({ stream }: { stream: MediaStream | null }) => {
+  const videoRef = React.useRef<HTMLVideoElement>(null);
 
-//   React.useEffect(() => {
-//     if (videoRef.current && stream) {
-//       videoRef.current.srcObject = stream;
-//     }
-//   }, [stream]);
-//   if (!stream) {
-//     return null;
-//   }
-//   return <video ref={videoRef} height={300} width={600} autoPlay />;
-// };
+  React.useEffect(() => {
+    if (videoRef.current && stream) {
+      videoRef.current.srcObject = stream;
+    }
+  }, [stream]);
+  if (!stream) {
+    return null;
+  }
+  return <video ref={videoRef} height={300} width={600} autoPlay />;
+};
 
 const VideoRecord: React.FC<IVideoRecord> = ({
   onCancel,
@@ -43,13 +43,17 @@ const VideoRecord: React.FC<IVideoRecord> = ({
           pauseRecording,
           resumeRecording,
           mediaBlobUrl,
-          //   previewStream,
+          previewStream,
           clearBlobUrl,
         }) => {
           setVideo(mediaBlobUrl);
           return (
             <div>
-              <video src={videoUrl} controls height={300} width={600} />
+              {videoUrl ? (
+                <video src={videoUrl} controls height={300} width={600} />
+              ) : (
+                <VideoPreview stream={previewStream} />
+              )}
               <p>{status}</p>
               <button onClick={startRecording}>Start Recording</button>
               <button onClick={stopRecording}>Stop Recording</button>
@@ -63,11 +67,6 @@ const VideoRecord: React.FC<IVideoRecord> = ({
               >
                 Clear Recording
               </button>
-              {/* {videoUrl ? (
-                <video src={videoUrl} controls height={300} width={600} />
-              ) : (
-                <VideoPreview stream={streaming} />
-              )} */}
             </div>
           );
         }}
