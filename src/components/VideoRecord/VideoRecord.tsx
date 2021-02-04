@@ -1,7 +1,7 @@
 import Modal from "antd/lib/modal/Modal";
 import React from "react";
 import { ReactMediaRecorder } from "react-media-recorder";
-
+import styles from "./VideoRecord.module.css";
 interface IVideoRecord {
   onCancel: () => void;
   visible: boolean;
@@ -31,6 +31,7 @@ const VideoRecord: React.FC<IVideoRecord> = ({
 }): React.ReactElement => {
   return (
     <Modal
+      title={"Запись видео-ответа"}
       onCancel={() => {
         setVideo(undefined);
         onCancel();
@@ -58,7 +59,13 @@ const VideoRecord: React.FC<IVideoRecord> = ({
           return (
             <div>
               {videoUrl && mediaBlobUrl ? (
-                <video src={videoUrl} controls height={300} width={600} />
+                <video
+                  src={videoUrl}
+                  controls
+                  height={300}
+                  width={600}
+                  className={styles.video}
+                />
               ) : (
                 <VideoPreview stream={previewStream} />
               )}
@@ -69,7 +76,7 @@ const VideoRecord: React.FC<IVideoRecord> = ({
               <button onClick={resumeRecording}>Resume Recording</button>
               <button
                 onClick={() => {
-                  status = "idle";
+                  status = "acquiring_media";
                   mediaBlobUrl = null;
                   clearBlobUrl();
                   setVideo(undefined);
