@@ -9,19 +9,19 @@ interface IVideoRecord {
   videoUrl?: string;
 }
 
-const VideoPreview = ({ stream }: { stream: MediaStream | null }) => {
-  const videoRef = React.useRef<HTMLVideoElement>(null);
+// const VideoPreview = ({ stream }: { stream: MediaStream | null }) => {
+//   const videoRef = React.useRef<HTMLVideoElement>(null);
 
-  React.useEffect(() => {
-    if (videoRef.current && stream) {
-      videoRef.current.srcObject = stream;
-    }
-  }, [stream]);
-  if (!stream) {
-    return null;
-  }
-  return <video ref={videoRef} height={300} width={600} autoPlay />;
-};
+//   React.useEffect(() => {
+//     if (videoRef.current && stream) {
+//       videoRef.current.srcObject = stream;
+//     }
+//   }, [stream]);
+//   if (!stream) {
+//     return null;
+//   }
+//   return <video ref={videoRef} height={300} width={600} autoPlay />;
+// };
 
 const VideoRecord: React.FC<IVideoRecord> = ({
   onCancel,
@@ -29,26 +29,12 @@ const VideoRecord: React.FC<IVideoRecord> = ({
   videoUrl,
   setVideo,
 }): React.ReactElement => {
-  const [streaming, setStreaming] = React.useState<MediaStream | null>(
-    new MediaStream()
-  );
   return (
-    <Modal
-      onCancel={(e: React.MouseEvent<HTMLElement, MouseEvent>) => {
-        setVideo(undefined);
-        onCancel();
-      }}
-      visible={visible}
-      footer={null}
-      width={800}
-    >
+    <Modal onCancel={onCancel} visible={visible} footer={null} width={800}>
       <ReactMediaRecorder
         video
         onStop={(blobUrl: string, blob: Blob) => {
           setVideo(blobUrl);
-        }}
-        mediaRecorderOptions={{
-          mediaBlobUrl: videoUrl,
         }}
         render={({
           status,
@@ -57,13 +43,13 @@ const VideoRecord: React.FC<IVideoRecord> = ({
           pauseRecording,
           resumeRecording,
           mediaBlobUrl,
-          previewStream,
+          //   previewStream,
           clearBlobUrl,
         }) => {
           setVideo(mediaBlobUrl);
-          setStreaming(previewStream);
           return (
             <div>
+              <video src={videoUrl} controls height={300} width={600} />
               <p>{status}</p>
               <button onClick={startRecording}>Start Recording</button>
               <button onClick={stopRecording}>Stop Recording</button>
@@ -77,11 +63,11 @@ const VideoRecord: React.FC<IVideoRecord> = ({
               >
                 Clear Recording
               </button>
-              {videoUrl ? (
+              {/* {videoUrl ? (
                 <video src={videoUrl} controls height={300} width={600} />
               ) : (
                 <VideoPreview stream={streaming} />
-              )}
+              )} */}
             </div>
           );
         }}
