@@ -29,6 +29,9 @@ const VideoRecord: React.FC<IVideoRecord> = ({
   videoUrl,
   setVideo,
 }): React.ReactElement => {
+  const [streaming, setStreaming] = React.useState<MediaStream | null>(
+    new MediaStream()
+  );
   return (
     <Modal
       onCancel={(e: React.MouseEvent<HTMLElement, MouseEvent>) => {
@@ -36,6 +39,7 @@ const VideoRecord: React.FC<IVideoRecord> = ({
         onCancel();
       }}
       visible={visible}
+      footer={null}
       width={800}
     >
       <ReactMediaRecorder
@@ -56,6 +60,8 @@ const VideoRecord: React.FC<IVideoRecord> = ({
           previewStream,
           clearBlobUrl,
         }) => {
+          setVideo(mediaBlobUrl);
+          setStreaming(previewStream);
           return (
             <div>
               <p>{status}</p>
@@ -71,10 +77,10 @@ const VideoRecord: React.FC<IVideoRecord> = ({
               >
                 Clear Recording
               </button>
-              {mediaBlobUrl ? (
-                <video src={mediaBlobUrl} controls height={300} width={600} />
+              {videoUrl ? (
+                <video src={videoUrl} controls height={300} width={600} />
               ) : (
-                <VideoPreview stream={previewStream} />
+                <VideoPreview stream={streaming} />
               )}
             </div>
           );
