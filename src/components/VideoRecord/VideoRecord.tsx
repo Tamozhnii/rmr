@@ -28,7 +28,7 @@ const VideoRecord: React.FC<IVideoRecord> = ({
   visible,
 }): React.ReactElement => {
   const [url, setUrl] = React.useState<string | undefined>();
-  const [stream, setStream] = React.useState<MediaStream | null>(
+  const [streams, setStreams] = React.useState<MediaStream | null>(
     new MediaStream()
   );
 
@@ -47,7 +47,7 @@ const VideoRecord: React.FC<IVideoRecord> = ({
         }}
         mediaRecorderOptions={{
           mediaBlobUrl: url,
-          previewStream: stream,
+          previewStream: streams,
         }}
         render={({
           status,
@@ -70,7 +70,10 @@ const VideoRecord: React.FC<IVideoRecord> = ({
                 onClick={() => {
                   clearBlobUrl();
                   setUrl(undefined);
-                  setStream(new MediaStream());
+                  new MediaDevices()
+                    .getUserMedia()
+                    .then((value: MediaStream) => setStreams(value))
+                    .catch();
                 }}
               >
                 Clear Recording
