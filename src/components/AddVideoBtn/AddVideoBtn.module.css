@@ -1,0 +1,41 @@
+.videoBtn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 200px;
+  height: 90px;
+  margin: 50px auto;
+  border: 1px gray solid;
+}
+
+.img {
+  font-size: 30px;
+  color: gray;
+}
+.title {
+  font-size: 16px;
+  margin: 0 auto;
+  align-items: center;
+  color: gray;
+}
+
+.videoBtn:hover {
+  cursor: pointer;
+  border-color: black;
+}
+.videoBtn:hover .img {
+  color: black;
+}
+.videoBtn:hover .title {
+  color: black;
+}
+.videoBtn:active {
+  border-color: gray;
+}
+.videoBtn:active .img {
+  color: gray;
+}
+.videoBtn:active .title {
+  color: gray;
+}
