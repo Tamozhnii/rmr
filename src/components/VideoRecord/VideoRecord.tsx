@@ -2,6 +2,13 @@ import Modal from "antd/lib/modal/Modal";
 import React from "react";
 import { ReactMediaRecorder } from "react-media-recorder";
 import styles from "./VideoRecord.module.css";
+
+enum EStatus {
+  "stopped" = "запсиь окончена",
+  "recording" = "запись",
+  "acquiring_media" = "подключение камеры",
+  "idle" = "режим ожидания",
+}
 interface IVideoRecord {
   onCancel: () => void;
   visible: boolean;
@@ -80,11 +87,25 @@ const VideoRecord: React.FC<IVideoRecord> = ({
               <p>{status}</p>
               <button onClick={startRecording}>Start Recording</button>
               <button onClick={stopRecording}>Stop Recording</button>
-              <button onClick={pauseRecording}>Pause Recording</button>
-              <button onClick={resumeRecording}>Resume Recording</button>
               <button
                 onClick={() => {
-                  status = "acquiring_media";
+                  pauseRecording();
+                  status = "stopping";
+                }}
+              >
+                Pause Recording
+              </button>
+              <button
+                onClick={() => {
+                  resumeRecording();
+                  status = "recording";
+                }}
+              >
+                Resume Recording
+              </button>
+              <button
+                onClick={() => {
+                  status = "idle";
                   mediaBlobUrl = null;
                   clearBlobUrl();
                   setVideo(undefined);
