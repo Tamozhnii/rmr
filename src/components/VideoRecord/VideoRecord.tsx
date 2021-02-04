@@ -78,13 +78,14 @@ const VideoRecord: React.FC<IVideoRecord> = ({
       <ReactMediaRecorder
         video
         onStop={(blobUrl: string, blob: Blob) => {
+          const date = new Date();
           setFileList([
             {
-              uid: blobUrl,
+              uid: blobUrl + date.toTimeString(),
               webkitRelativePath: blobUrl,
-              lastModifiedDate: new Date(),
-              lastModified: 1,
-              name: "file",
+              lastModifiedDate: date,
+              lastModified: date.getTime(),
+              name: `file${date.toDateString()}.${blob.type}`,
               ...blob,
             },
           ]);
@@ -162,7 +163,7 @@ const VideoRecord: React.FC<IVideoRecord> = ({
                 loading={uploading}
                 style={{ marginTop: 16 }}
               >
-                {uploading ? "Загружено" : "Начать загрузку"}
+                {uploading ? "Загрузка" : "Начать загрузку"}
               </Button>
             </div>
           );
