@@ -109,6 +109,7 @@ const VideoRecord: React.FC<IVideoRecord> = ({
               <button
                 onClick={() => {
                   pauseRecording();
+                  console.log(status);
                   status = "stopping";
                 }}
               >
@@ -117,6 +118,7 @@ const VideoRecord: React.FC<IVideoRecord> = ({
               <button
                 onClick={() => {
                   resumeRecording();
+                  console.log(status);
                   status = "recording";
                 }}
               >
@@ -124,9 +126,10 @@ const VideoRecord: React.FC<IVideoRecord> = ({
               </button>
               <button
                 onClick={() => {
-                  status = "idle";
-                  mediaBlobUrl = null;
                   clearBlobUrl();
+                  mediaBlobUrl = null;
+                  console.log(status);
+                  status = "idle";
                   setVideo(undefined);
                 }}
               >
