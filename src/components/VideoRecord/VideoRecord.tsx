@@ -69,6 +69,7 @@ const VideoRecord: React.FC<IVideoRecord> = ({
               <button onClick={resumeRecording}>Resume Recording</button>
               <button
                 onClick={() => {
+                  status = "idle";
                   mediaBlobUrl = null;
                   clearBlobUrl();
                   setVideo(undefined);
