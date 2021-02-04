@@ -9,6 +9,25 @@ enum EStatus {
   "acquiring_media" = "подключение камеры",
   "idle" = "режим ожидания",
 }
+const getStatus = (status: string): string => {
+  switch (status) {
+    case "stopped":
+      return "Запиcь окончена";
+      break;
+    case "recording":
+      return "Запись";
+      break;
+    case "acquiring_media":
+      return "Подключение камеры";
+      break;
+    case "idle":
+      return "Режим ожидания";
+      break;
+    default:
+      return "...";
+      break;
+  }
+};
 interface IVideoRecord {
   onCancel: () => void;
   visible: boolean;
@@ -84,7 +103,7 @@ const VideoRecord: React.FC<IVideoRecord> = ({
               ) : (
                 <VideoPreview stream={previewStream} />
               )}
-              <p>{status}</p>
+              <p>{getStatus(status)}</p>
               <button onClick={startRecording}>Start Recording</button>
               <button onClick={stopRecording}>Stop Recording</button>
               <button
