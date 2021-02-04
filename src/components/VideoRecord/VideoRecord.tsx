@@ -154,7 +154,12 @@ const VideoRecord: React.FC<IVideoRecord> = ({
               </button>
               <Upload
                 fileList={fileList}
-                onRemove={onRemove}
+                onRemove={() => {
+                  onRemove();
+                  clearBlobUrl();
+                  mediaBlobUrl = null;
+                  setVideo(undefined);
+                }}
                 beforeUpload={beforeUpload}
               >
                 <Button icon={<UploadOutlined />}>Select File</Button>
