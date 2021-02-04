@@ -6,13 +6,20 @@ import VideoRecord from "../../components/VideoRecord/VideoRecord";
 
 const Canvas: React.FC = (): React.ReactElement => {
   const [modal, setModal] = React.useState(false);
+  const [url, setUrl] = React.useState<string | undefined>(undefined);
+  const handleSetVideo = (value: string | undefined) => setUrl(value);
   const handleClick = React.useCallback(() => setModal(true), []);
-  const handleOk = () => setModal(false);
   const handleCancel = () => setModal(false);
+
   return (
     <Content className={style.canvas}>
       <AddVideoBtn handleClick={handleClick} />
-      <VideoRecord onOk={handleOk} onCancel={handleCancel} visible={modal} />
+      <VideoRecord
+        onCancel={handleCancel}
+        visible={modal}
+        setVideo={handleSetVideo}
+        videoUrl={url}
+      />
     </Content>
   );
 };

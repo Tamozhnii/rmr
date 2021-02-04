@@ -3,9 +3,10 @@ import React from "react";
 import { ReactMediaRecorder } from "react-media-recorder";
 
 interface IVideoRecord {
-  onOk: (e: React.MouseEvent<HTMLElement, MouseEvent>) => void;
-  onCancel: (e: React.MouseEvent<HTMLElement, MouseEvent>) => void;
+  onCancel: () => void;
   visible: boolean;
+  setVideo: Function;
+  videoUrl?: string;
 }
 
 const VideoPreview = ({ stream }: { stream: MediaStream | null }) => {
@@ -23,31 +24,27 @@ const VideoPreview = ({ stream }: { stream: MediaStream | null }) => {
 };
 
 const VideoRecord: React.FC<IVideoRecord> = ({
-  onOk: handleOk,
-  onCancel: handleCancel,
+  onCancel,
   visible,
+  videoUrl,
+  setVideo,
 }): React.ReactElement => {
-  const [url, setUrl] = React.useState<string | undefined>();
-  const [streams, setStreams] = React.useState<MediaStream | null>(
-    new MediaStream()
-  );
-
   return (
     <Modal
-      onCancel={handleCancel}
-      closeIcon={false}
-      cancelText={"Ok"}
+      onCancel={(e: React.MouseEvent<HTMLElement, MouseEvent>) => {
+        setVideo(undefined);
+        onCancel();
+      }}
       visible={visible}
       width={800}
     >
       <ReactMediaRecorder
         video
         onStop={(blobUrl: string, blob: Blob) => {
-          setUrl(blobUrl);
+          setVideo(blobUrl);
         }}
         mediaRecorderOptions={{
-          mediaBlobUrl: url,
-          previewStream: streams,
+          mediaBlobUrl: videoUrl,
         }}
         render={({
           status,
@@ -69,11 +66,7 @@ const VideoRecord: React.FC<IVideoRecord> = ({
               <button
                 onClick={() => {
                   clearBlobUrl();
-                  setUrl(undefined);
-                  new MediaDevices()
-                    .getUserMedia()
-                    .then((value: MediaStream) => setStreams(value))
-                    .catch();
+                  setVideo(undefined);
                 }}
               >
                 Clear Recording
