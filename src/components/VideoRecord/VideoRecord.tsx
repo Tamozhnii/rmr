@@ -3,29 +3,18 @@ import React from "react";
 import { ReactMediaRecorder } from "react-media-recorder";
 import styles from "./VideoRecord.module.css";
 
-enum EStatus {
-  "stopped" = "запсиь окончена",
-  "recording" = "запись",
-  "acquiring_media" = "подключение камеры",
-  "idle" = "режим ожидания",
-}
 const getStatus = (status: string): string => {
   switch (status) {
     case "stopped":
       return "Запиcь окончена";
-      break;
     case "recording":
       return "Запись";
-      break;
     case "acquiring_media":
       return "Подключение камеры";
-      break;
     case "idle":
       return "Режим ожидания";
-      break;
     default:
       return "...";
-      break;
   }
 };
 interface IVideoRecord {
@@ -81,63 +70,70 @@ const VideoRecord: React.FC<IVideoRecord> = ({
           setVideo(blobUrl);
         }}
         mediaRecorderOptions={{ status: stat }}
-        render={({
-          status,
-          startRecording,
-          stopRecording,
-          pauseRecording,
-          resumeRecording,
-          mediaBlobUrl,
-          previewStream,
-          clearBlobUrl,
-        }) => {
-          setVideo(mediaBlobUrl);
-          setStat(status);
-          return (
-            <div>
-              {videoUrl && mediaBlobUrl ? (
-                <video
-                  src={videoUrl}
-                  controls
-                  height={300}
-                  width={600}
-                  className={styles.video}
-                />
-              ) : (
-                <VideoPreview stream={previewStream} />
-              )}
-              <p>{getStatus(status)}</p>
-              <button onClick={startRecording}>Start Recording</button>
-              <button onClick={stopRecording}>Stop Recording</button>
-              <button
-                onClick={() => {
-                  pauseRecording();
-                  setStat("stopping");
-                }}
-              >
-                Pause Recording
-              </button>
-              <button
-                onClick={() => {
-                  resumeRecording();
-                  setStat("recording");
-                }}
-              >
-                Resume Recording
-              </button>
-              <button
-                onClick={() => {
-                  clearBlobUrl();
-                  mediaBlobUrl = null;
-                  setVideo(undefined);
-                  setStat("idle");
-                }}
-              >
-                Clear Recording
-              </button>
-            </div>
-          );
-        }}
+        render={React.useCallback(
+          ({
+            status,
+            startRecording,
+            stopRecording,
+            pauseRecording,
+            resumeRecording,
+            mediaBlobUrl,
+            previewStream,
+            clearBlobUrl,
+          }) => {
+            setVideo(mediaBlobUrl);
+            setStat(status);
+            return (
+              <div>
+                {videoUrl && mediaBlobUrl ? (
+                  <video
+                    src={videoUrl}
+                    controls
+                    height={300}
+                    width={600}
+                    className={styles.video}
+                  />
+                ) : (
+                  <VideoPreview stream={previewStream} />
+                )}
+                <p>{getStatus(status)}</p>
+                <button onClick={startRecording}>Start Recording</button>
+                <button onClick={stopRecording}>Stop Recording</button>
+                <button
+                  onClick={() => {
+                    pauseRecording();
+                    status = "stopping";
+                    setStat(status);
+                  }}
+                >
+                  Pause Recording
+                </button>
+                <button
+                  onClick={() => {
+                    resumeRecording();
+                    status = "recording";
+                    setStat(status);
+                  }}
+                >
+                  Resume Recording
+                </button>
+                <button
+                  onClick={() => {
+                    clearBlobUrl();
+                    mediaBlobUrl = null;
+                    setVideo(undefined);
+                    status = "idle";
+                    setStat(status);
+                  }}
+                >
+                  Clear Recording
+                </button>
+              </div>
+            );
+          },
+          // eslint-disable-next-line react-hooks/exhaustive-deps
+          [stat, videoUrl]
+        )}
       />
     </Modal>
   );
