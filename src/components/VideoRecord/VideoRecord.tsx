@@ -20,7 +20,15 @@ const VideoPreview = ({ stream }: { stream: MediaStream | null }) => {
   if (!stream) {
     return null;
   }
-  return <video ref={videoRef} height={300} width={600} autoPlay />;
+  return (
+    <video
+      ref={videoRef}
+      height={300}
+      width={600}
+      autoPlay
+      className={styles.video}
+    />
+  );
 };
 
 const VideoRecord: React.FC<IVideoRecord> = ({
