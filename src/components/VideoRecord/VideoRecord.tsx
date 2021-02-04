@@ -81,11 +81,13 @@ const VideoRecord: React.FC<IVideoRecord> = ({
           const date = new Date();
           setFileList([
             {
-              uid: blobUrl + date.toTimeString(),
+              uid: `${blobUrl}_${date.getTime()}`,
               webkitRelativePath: blobUrl,
               lastModifiedDate: date,
               lastModified: date.getTime(),
-              name: `file${date.toDateString()}.${blob.type}`,
+              name: `file_${date.getFullYear()}_${date.getMonth()}_${
+                date.getDate() + 1
+              }_${date.getHours()}_${date.getMinutes()}_${date.getSeconds()}.mp4`,
               ...blob,
             },
           ]);
@@ -143,6 +145,7 @@ const VideoRecord: React.FC<IVideoRecord> = ({
                   clearBlobUrl();
                   mediaBlobUrl = null;
                   setVideo(undefined);
+                  onRemove();
                   status = "idle";
                   setStat(status);
                 }}
