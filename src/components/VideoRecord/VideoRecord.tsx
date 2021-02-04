@@ -63,6 +63,7 @@ const VideoRecord: React.FC<IVideoRecord> = ({
   videoUrl,
   setVideo,
 }): React.ReactElement => {
+  const [stat, setStat] = React.useState<string>("acquiring_media");
   return (
     <Modal
       title={"Запись видео-ответа"}
@@ -79,6 +80,7 @@ const VideoRecord: React.FC<IVideoRecord> = ({
         onStop={(blobUrl: string, blob: Blob) => {
           setVideo(blobUrl);
         }}
+        mediaRecorderOptions={{ status: stat }}
         render={({
           status,
           startRecording,
@@ -90,6 +92,7 @@ const VideoRecord: React.FC<IVideoRecord> = ({
           clearBlobUrl,
         }) => {
           setVideo(mediaBlobUrl);
+          setStat(status);
           return (
             <div>
               {videoUrl && mediaBlobUrl ? (
@@ -109,8 +112,7 @@ const VideoRecord: React.FC<IVideoRecord> = ({
               <button
                 onClick={() => {
                   pauseRecording();
-                  console.log(status);
-                  status = "stopping";
+                  setStat("stopping");
                 }}
               >
                 Pause Recording
@@ -118,8 +120,7 @@ const VideoRecord: React.FC<IVideoRecord> = ({
               <button
                 onClick={() => {
                   resumeRecording();
-                  console.log(status);
-                  status = "recording";
+                  setStat("recording");
                 }}
               >
                 Resume Recording
@@ -128,9 +129,8 @@ const VideoRecord: React.FC<IVideoRecord> = ({
                 onClick={() => {
                   clearBlobUrl();
                   mediaBlobUrl = null;
-                  console.log(status);
-                  status = "idle";
                   setVideo(undefined);
+                  setStat("idle");
                 }}
               >
                 Clear Recording
