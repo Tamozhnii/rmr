@@ -1,20 +1,16 @@
-import React from 'react'
+import React from "react";
 
 const Video: React.FC = (): JSX.Element => {
-    const video = document.querySelector('video')
+  navigator.getUserMedia(
+    { video: true, audio: true },
+    (steam) => {
+      const video = document.querySelector("video");
+      if (video) video.src = window.URL.createObjectURL(steam);
+    },
+    (err) => {}
+  );
 
-    navigator.mediaDevices.getUserMedia({ video: true, audio: true }).then((steam) => {
-        if (video) {
-            video.src = window.URL.createObjectURL(steam)
-        }
-    })
+  return <video autoPlay width={300} height={200} />;
+};
 
-
-    return (
-        <div>
-            <video />
-        </div>
-    )
-}
-
-export default Video
+export default Video;
