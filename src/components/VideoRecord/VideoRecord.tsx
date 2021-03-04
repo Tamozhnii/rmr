@@ -1,8 +1,8 @@
+import React from "react";
 import { UploadOutlined } from "@ant-design/icons";
 import { Button, Upload } from "antd";
 import Modal from "antd/lib/modal/Modal";
 import { RcFile } from "antd/lib/upload";
-import React from "react";
 import { ReactMediaRecorder } from "react-media-recorder";
 import styles from "./VideoRecord.module.css";
 
@@ -160,7 +160,10 @@ const VideoRecord: React.FC<IVideoRecord> = ({
                   mediaBlobUrl = null;
                   setVideo(undefined);
                 }}
-                beforeUpload={beforeUpload}
+                beforeUpload={(file: RcFile, FileList: RcFile[]) => {
+                  setVideo(file);
+                  return beforeUpload(file);
+                }}
               >
                 <Button icon={<UploadOutlined />}>Select File</Button>
               </Upload>
