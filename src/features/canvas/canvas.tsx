@@ -3,6 +3,7 @@ import { Content } from "antd/lib/layout/layout";
 import AddVideoBtn from "../../components/AddVideoBtn/AddVideoBtn";
 import style from "./canvas.module.css";
 import VideoRecord from "../../components/VideoRecord/VideoRecord";
+import ReactVideoRecorder from "../../components/ReactVideoRecorder/ReactVideoRecorder";
 
 const Canvas: React.FC = (): React.ReactElement => {
   const [modal, setModal] = React.useState(false);
@@ -14,12 +15,13 @@ const Canvas: React.FC = (): React.ReactElement => {
   return (
     <Content className={style.canvas}>
       <AddVideoBtn handleClick={handleClick} />
-      <VideoRecord
+      {/* <VideoRecord
         onCancel={handleCancel}
         visible={modal}
         setVideo={handleSetVideo}
         videoUrl={url}
-      />
+      /> */}
+      <ReactVideoRecorder onCancel={handleCancel} visible={modal} />
     </Content>
   );
 };
